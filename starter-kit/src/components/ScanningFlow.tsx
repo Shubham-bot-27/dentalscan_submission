@@ -93,8 +93,20 @@ export default function ScanningFlow() {
           setCamReady(true);
         }
       } catch (err) {
-        console.error("Camera access denied", err);
-        setScanError("We could not access the camera. Check browser permissions and try again.");
+        let errorMessage = "We could not access the camera. Check browser permissions and try again.";
+        
+        if (err instanceof DOMException) {
+          if (err.name === "NotFoundError") {
+            errorMessage = "No camera device found. Please connect a camera and refresh the page.";
+          } else if (err.name === "NotReadableError") {
+            errorMessage = "The camera is in use by another application. Please close other apps and try again.";
+          } else if (err.name === "NotAllowedError") {
+            errorMessage = "Camera permission denied. Please allow camera access in your browser settings and refresh.";
+          }
+        }
+        
+        console.error(`Camera access denied: ${(err as any)?.name || "Unknown"}`, err);
+        setScanError(errorMessage);
       }
     }
 
