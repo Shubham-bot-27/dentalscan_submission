@@ -1,0 +1,10 @@
+# root
+node_modules/
+.next/
+
+# inside starter-kit
+starter-kit/node_modules/
+starter-kit/.next/
+
+.env
+.env.local
